@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<xml status="WARN">
+	<RegexFilter regex=".*\$.+.*" onMatch="DENY" onMismatch="NEUTRAL"/>
+	<Appenders>
+		<RollingFile name="tdr_appender"
+			fileName="logs/PhoneBook.log"
+			filePattern="logs/PhoneBook_%d{yyyyMMdd_HH}.log">
+			<PatternLayout>
+				<Pattern>%d|%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+			</Policies>
+		</RollingFile>
+		<RollingFile name="debug_appender"
+			fileName="logs/debug.log"
+			filePattern="logs/debug.log.%d{yyyyMMdd_HH}.gz">
+			<PatternLayout>
+				<Pattern>%d|%t|%p|%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+			</Policies>
+		</RollingFile>
+		<Console name="RootConsole" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="tdr" level="info" additivity="false">
+			<AppenderRef ref="tdr_appender" />
+		</Logger>
+		<Logger name="debugger" level="debug" additivity="false">
+			<AppenderRef ref="debug_appender" />
+		</Logger>
+
+		<Root level="info">
+			<AppenderRef ref="RootConsole" />
+		</Root>
+	</Loggers>
+</xml>
