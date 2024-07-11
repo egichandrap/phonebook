@@ -1,6 +1,7 @@
 package com.example.phonebook.domain.ports.api;
 
 import com.example.phonebook.application.request.ContactRequest;
+import com.example.phonebook.domain.data.ContactDTO;
 import com.example.phonebook.domain.data.ContactResultDTO;
 import com.example.phonebook.infrastructure.exception.ContactException;
 import org.springframework.stereotype.Service;

@@ -9,6 +9,7 @@ import com.example.phonebook.infrastructure.util.Util;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -63,23 +64,24 @@ public class ContactRepository extends DsC {
         return contact;
     }
 
-    public int updateDataPhoneBook(int contactId, String newName, String newPhone, String newEmail) throws ContactException {
+    public int updateDataPhoneBook(Contact contact) throws ContactException {
         boolean isFirst = true;
         int result = 0;
         StringBuilder queryBuilder = new StringBuilder("UPDATE Contact SET ");
-        if (newName != null) {
+        if (contact.getName() != null) {
             queryBuilder.append("name = ?");
             isFirst = false;
         }
-        if (newPhone != null) {
+        if (contact.getPhone_number() != null) {
             if (!isFirst) queryBuilder.append(", ");
             queryBuilder.append("phone_number = ?");
             isFirst = false;
         }
-        if (newEmail != null) {
+        if (contact.getEmail() != null) {
             if (!isFirst) queryBuilder.append(", ");
             queryBuilder.append("email = ?");
         }
+        queryBuilder.append(", last_update = ?");
         queryBuilder.append(" WHERE Id = ?");
         String query = queryBuilder.toString();
 
@@ -87,16 +89,17 @@ public class ContactRepository extends DsC {
              PreparedStatement pUpdateData = cUpdateData.prepareStatement(query)) {
             int parameterIndex = 1;
 
-            if (newName != null) {
-                pUpdateData.setString(parameterIndex++, newName);
+            if (contact.getName() != null) {
+                pUpdateData.setString(parameterIndex++, contact.getName());
             }
-            if (newPhone != null) {
-                pUpdateData.setString(parameterIndex++, newPhone);
+            if (contact.getPhone_number() != null) {
+                pUpdateData.setString(parameterIndex++, contact.getPhone_number());
             }
-            if (newEmail != null) {
-                pUpdateData.setString(parameterIndex++, newEmail);
+            if (contact.getEmail() != null) {
+                pUpdateData.setString(parameterIndex++, contact.getEmail());
             }
-            pUpdateData.setInt(parameterIndex, contactId);
+            pUpdateData.setString(parameterIndex++, Util.formatDateStr(contact.getLastUpdate()));
+            pUpdateData.setInt(parameterIndex, contact.getId());
             result = executeUpdateOrInsert(pUpdateData, query);
         } catch (Exception e) {
             clearMySqlConn();

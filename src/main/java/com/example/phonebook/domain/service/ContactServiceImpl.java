@@ -5,6 +5,7 @@ import com.example.phonebook.domain.data.ContactDTO;
 import com.example.phonebook.domain.data.ContactResultDTO;
 import com.example.phonebook.domain.ports.api.ContactServicePort;
 import com.example.phonebook.domain.ports.spi.ContactPersistencePort;
+import com.example.phonebook.infrastructure.entity.Contact;
 import com.example.phonebook.infrastructure.exception.ContactException;
 import com.example.phonebook.infrastructure.util.ContactHttpStatus;
 import com.example.phonebook.infrastructure.util.Util;
@@ -57,7 +58,14 @@ public class ContactServiceImpl implements ContactServicePort {
     @Override
     public void update(int contactId, String name, String phone, String email) throws ContactException {
         try {
-            Integer result = contactPersistencePort.update(contactId, name, phone, email);
+            ContactDTO contactDTO = new ContactDTO();
+            contactDTO.setId(contactId);
+            contactDTO.setName(name);
+            contactDTO.setPhone_number(phone);
+            contactDTO.setEmail(email);
+            contactDTO.setLastUpdate(new Date());
+            Contact contact = Util.INSTANCE_MAPPER.contactDTOtoContact(contactDTO);
+            Integer result = contactPersistencePort.update(contact);
         } catch (ContactException e){
             throw e;
         } catch (Exception exception){

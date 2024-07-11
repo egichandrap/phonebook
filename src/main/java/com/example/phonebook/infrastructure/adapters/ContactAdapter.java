@@ -44,10 +44,10 @@ public class ContactAdapter implements ContactPersistencePort {
     }
 
     @Override
-    public Integer update(int contactId, String name, String phone, String email) throws ContactException {
+    public Integer update(Contact contact) throws ContactException {
         int result = 0;
         try {
-            result = contactRepository.updateDataPhoneBook(contactId, name, phone, email);
+            result = contactRepository.updateDataPhoneBook(contact);
         } catch (Exception e){
             Throwable throwable = Util.lastThrowable(e);
             Util.debugLogger.error("Update Data Contact Phone Book Error | {} | {}", throwable.getMessage(), throwable.getCause());
