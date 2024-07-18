@@ -45,6 +45,10 @@ public class ContactServiceImpl implements ContactServicePort {
     public ContactResultDTO get(String param) throws ContactException {
         try {
             ContactDTO contactDTO = contactPersistencePort.get(param);
+            if (Util.isEmptyOrNull(contactDTO)) {
+                Util.debugLogger.info("Contact Not Found");
+                throw new ContactException(ContactHttpStatus.BAD_REQUEST);
+            }
             return new ContactResultDTO(Statement.RETURN_GENERATED_KEYS, contactDTO);
         } catch (ContactException e){
             throw e;
@@ -65,7 +69,7 @@ public class ContactServiceImpl implements ContactServicePort {
             contactDTO.setEmail(email);
             contactDTO.setLastUpdate(new Date());
             Contact contact = Util.INSTANCE_MAPPER.contactDTOtoContact(contactDTO);
-            Integer result = contactPersistencePort.update(contact);
+            contactPersistencePort.update(contact);
         } catch (ContactException e){
             throw e;
         } catch (Exception exception){

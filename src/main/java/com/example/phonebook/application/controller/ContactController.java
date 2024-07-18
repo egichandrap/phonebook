@@ -71,7 +71,7 @@ public class ContactController {
 
     @GetMapping("/get")
     public ResponseEntity<Object> getContact (
-            @RequestParam(name = "param", required = true) String param
+            @RequestParam(name = "param", required = true) String param // param ini bisa menggunakan nomor handphone atau nama
     ) {
         try {
             ThreadContext.put("data", param);
